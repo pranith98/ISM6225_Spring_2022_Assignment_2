@@ -611,9 +611,11 @@ namespace ISM6225_Assignment_2_Spring_2022
                     StringBuilder str = new StringBuilder();
                     foreach (char c in w)
                     {
+                        //Transforming alphabets to morse code
                         int index = letters.IndexOf(c);
                         str.Append(codes[index]);
                     }
+                    //Adding unique elements to the set
                     res.Add(str.ToString());
                 }
 
@@ -731,7 +733,9 @@ namespace ISM6225_Assignment_2_Spring_2022
             }
         }
 
-
+        /**
+         * Function to find the loewest between 3 integers
+         */
         static int min(int x, int y, int z)
         {
             if (x <= y && x <= z)
