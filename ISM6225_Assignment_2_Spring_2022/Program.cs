@@ -106,13 +106,13 @@ namespace ISM6225_Assignment_2_Spring_2022
 
             //Question 10:
             Console.WriteLine("Question 10");
-            string word1  = "horse";
+            string word1 = "horse";
             string word2 = "ros";
-            int minLen = MinDistance( word1,  word2);
+            int minLen = MinDistance(word1, word2);
             Console.WriteLine("Minimum number of operations required are {0}", minLen);
             Console.WriteLine();
         }
-    
+
 
         /*
         
@@ -136,7 +136,7 @@ namespace ISM6225_Assignment_2_Spring_2022
             try
             {
                 //Write your Code here.
-                
+
                 int start = 0;
                 int end = nums.Length - 1;
 
@@ -185,7 +185,7 @@ namespace ISM6225_Assignment_2_Spring_2022
         {
             try
             {
-                
+
                 //write your code here.
                 //using regex to remove punctuations
                 paragraph = Regex.Replace(paragraph, @"[^\w\s]", "");
@@ -194,17 +194,17 @@ namespace ISM6225_Assignment_2_Spring_2022
                 //paragraph to array
                 string[] words = paragraph.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-                List<string> b= new List<string>(banned);
+                List<string> b = new List<string>(banned);
 
 
                 //Creating dictionary
                 Dictionary<string, int> dict = new Dictionary<string, int>();
 
-                foreach (string c in words) 
+                foreach (string c in words)
                 {
                     if (dict.ContainsKey(c))
                         dict[c] = dict[c] + 1;
-                    else if(!b.Contains(c))
+                    else if (!b.Contains(c))
                         dict.Add(c, 1);
                 }
 
@@ -260,7 +260,7 @@ namespace ISM6225_Assignment_2_Spring_2022
                 }
 
                 //filtering and ordering
-                dict = dict.Where(x=> x.Key == x.Value)
+                dict = dict.Where(x => x.Key == x.Value)
                     .OrderByDescending(x => x.Value)
                     .ToDictionary(x => x.Key, x => x.Value);
 
@@ -450,7 +450,7 @@ namespace ISM6225_Assignment_2_Spring_2022
 
          */
 
-        public static List<int> NumberOfLines(int[] widths,string s)
+        public static List<int> NumberOfLines(int[] widths, string s)
         {
             try
             {
@@ -481,7 +481,7 @@ namespace ISM6225_Assignment_2_Spring_2022
                         units += widths[c - 'a'];
                     }
                 }
-                
+
                 list.Add(line);
                 list.Add(units);
                 return list;
@@ -555,7 +555,7 @@ namespace ISM6225_Assignment_2_Spring_2022
                     }
                 }
                 return !leftSymbols.Any();
-                
+
             }
             catch (Exception e)
             {
@@ -604,14 +604,14 @@ namespace ISM6225_Assignment_2_Spring_2022
 
                 HashSet<String> res = new HashSet<String>();
                 String[] codes = { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
-                String alphabet = "abcdefghijklmnopqrstuvwxyz";
+                String letters = "abcdefghijklmnopqrstuvwxyz";
 
                 foreach (String w in words)
                 {
                     StringBuilder str = new StringBuilder();
-                    foreach (char c in  w)
+                    foreach (char c in w)
                     {
-                        int index = alphabet.IndexOf(c);
+                        int index = letters.IndexOf(c);
                         str.Append(codes[index]);
                     }
                     res.Add(str.ToString());
@@ -629,7 +629,7 @@ namespace ISM6225_Assignment_2_Spring_2022
 
         }
 
-      
+
 
 
         /*
@@ -689,8 +689,39 @@ namespace ISM6225_Assignment_2_Spring_2022
             {
                 //write your code here.
 
-                return 0;
+                int len1 = word1.Length, len2 = word2.Length;
 
+
+                // Creating a Dynamic Programing table to store results of all subproblems
+                int[,] dp = new int[len1 + 1, len2 + 1];
+
+                // Fill dp array
+                for (int i = 0; i <= len1; i++)
+                {
+                    for (int j = 0; j <= len2; j++)
+                    {
+                        // If either string is empty, we insert all chars from other
+                        if (i == 0)
+                            dp[i, j] = j;
+
+                        else if (j == 0)
+                            dp[i, j] = i;
+
+                        // If last characters of two strings are same, get count for remaining strings.
+                        else if (word1[i - 1] == word2[j - 1])
+                            dp[i, j] = dp[i - 1, j - 1];
+
+                        // If the last character is different, consider all possibilities and find the minimum
+                        else
+                            dp[i, j] = 1
+                                       + min(dp[i, j - 1], // Insert
+                                             dp[i - 1, j], // Remove
+                                             dp[i - 1,
+                                                j - 1]); // Replace
+                    }
+
+                }
+                return dp[len1, len2];
             }
             catch (Exception e)
             {
@@ -699,5 +730,17 @@ namespace ISM6225_Assignment_2_Spring_2022
                 throw;
             }
         }
+
+
+        static int min(int x, int y, int z)
+        {
+            if (x <= y && x <= z)
+                return x;
+            if (y <= x && y <= z)
+                return y;
+            else
+                return z;
+        }
+
     }
 }
