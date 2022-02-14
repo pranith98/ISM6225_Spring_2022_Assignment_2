@@ -695,7 +695,7 @@ namespace ISM6225_Assignment_2_Spring_2022
 
 
                 // Creating a Dynamic Programing table to store results of all subproblems
-                int[,] dp = new int[len1 + 1, len2 + 1];
+                int[,] cache = new int[len1 + 1, len2 + 1];
 
                 // Fill dp array
                 for (int i = 0; i <= len1; i++)
@@ -704,26 +704,26 @@ namespace ISM6225_Assignment_2_Spring_2022
                     {
                         // If either string is empty, we insert all chars from other
                         if (i == 0)
-                            dp[i, j] = j;
+                            cache[i, j] = j;
 
                         else if (j == 0)
-                            dp[i, j] = i;
+                            cache[i, j] = i;
 
                         // If last characters of two strings are same, get count for remaining strings.
                         else if (word1[i - 1] == word2[j - 1])
-                            dp[i, j] = dp[i - 1, j - 1];
+                            cache[i, j] = cache[i - 1, j - 1];
 
                         // If the last character is different, consider all possibilities and find the minimum
                         else
-                            dp[i, j] = 1
-                                       + min(dp[i, j - 1], // Insert
-                                             dp[i - 1, j], // Remove
-                                             dp[i - 1,
+                            cache[i, j] = 1
+                                       + min(cache[i, j - 1], // Insert
+                                             cache[i - 1, j], // Remove
+                                             cache[i - 1,
                                                 j - 1]); // Replace
                     }
 
                 }
-                return dp[len1, len2];
+                return cache[len1, len2];
             }
             catch (Exception e)
             {
