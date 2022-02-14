@@ -3,4 +3,4 @@
 Assignment 2 from Distributed information system course
 
 Output File:
-![Output](Output_Screenshot.jpg)
+![Output](Output_Screenshot.png)
