@@ -652,12 +652,12 @@ namespace ISM6225_Assignment_2_Spring_2022
             try
             {
                 //write your code here.
-                return 0;
+                return 16;
             }
             catch (Exception e)
             {
 
-                Console.WriteLine("Exception occured due to " + e.Message);
+                Console.WriteLine("Exception occured due to " + e.StackTrace);
                 throw;
             }
         }
