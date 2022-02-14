@@ -654,7 +654,57 @@ namespace ISM6225_Assignment_2_Spring_2022
             try
             {
                 //write your code here.
-                return 16;
+                if (grid == null || grid.Length == 0)
+                {
+                    return 0;
+                }
+
+                //Directional grid
+                int[] dirs = new int[] { 1, 0, -1, 0, 1 };
+                int n = grid.GetLength(0);
+
+                //Cache object containing the max integer value
+                int[,] moveTime = new int[n,n];
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                        moveTime[i,j] =  int.MaxValue;
+                }
+
+                //Assigning initial 1x1 position
+                moveTime[0,0] = grid[0,0];
+                Queue<int[]> queue = new Queue<int[]>();
+                queue.Enqueue(new int[] { 0, 0 });
+
+
+                //While queue not empty
+                while (queue.Any())
+                {
+                    //Dequing first element and finding the shortest weighted paths next
+                    int[] position = queue.Dequeue();
+
+                    //Finding the next 4 non-visited nodes to find the next low weighed path
+                    for (int i = 0; i < dirs.Length - 1; i++)
+                    {
+                        int x = position[0] + dirs[i];
+                        int y = position[1] + dirs[i + 1];
+
+                        //Skip if x and y is negative or greater than array size
+                        if (x < 0 || n <= x || y < 0 || n <= y) 
+                            continue;
+
+
+                        int currentMin = Math.Max(moveTime[position[0],position[1]], grid[x,y]);
+
+                        //If current min is less than the previous, we add it to the queue
+                        if (currentMin < moveTime[x,y])
+                        {
+                            moveTime[x,y] = currentMin;
+                            queue.Enqueue(new int[] { x, y });
+                        }
+                    }
+                }
+                return moveTime[n - 1, n - 1];
             }
             catch (Exception e)
             {
